@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,6 +21,10 @@ public class ExpenseServiceImpl  implements ExpenseService{
     @Override
     public Page<Expense> getAllExpenses(Pageable pageable) {
         return expenseRepository.findAll(pageable);
+    }
+
+    public List<Expense> readByCategory(String category, Pageable page){
+        return expenseRepository.findByCategory(category,page).toList();
     }
 
     @Override

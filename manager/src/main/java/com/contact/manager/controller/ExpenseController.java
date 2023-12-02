@@ -45,6 +45,12 @@ public class ExpenseController {
         return expenseService.getExpenseById(id);
     }
 
+
+    @GetMapping("/expenses/category")
+    public List<Expense> getExpensesByCategory(@RequestParam("category") String category, Pageable page){
+        return expenseService.readByCategory(category,page);
+    }
+
     // passing value as request parameter
     //http://localhost:8080/expense?id=45
     @GetMapping("/expense")
