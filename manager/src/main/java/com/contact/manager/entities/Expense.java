@@ -1,5 +1,6 @@
 package com.contact.manager.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
@@ -9,7 +10,8 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Date;
 
-@Entity(name="tbl_expenses")
+@Entity
+@Table(name="tbl_expenses")
 public class Expense {
 
     @Id
@@ -36,17 +38,25 @@ public class Expense {
     @UpdateTimestamp
     private Timestamp updatedAt;
 
+    @JsonBackReference
+    @ManyToOne(cascade=CascadeType.ALL,fetch = FetchType.LAZY)
+    @JoinColumn(name="user_id")
+    private User user;
+
 
     public Expense() {
     }
 
-    public Expense(long id, String name, String description, BigDecimal amount, String category, Date date) {
+    public Expense(long id, String name, String description, BigDecimal amount, String category, Date date, Timestamp createdAt, Timestamp updatedAt, User user) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.amount = amount;
         this.category = category;
         this.date = date;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.user = user;
     }
 
     public Expense(Expense existingExpense) {
@@ -119,5 +129,13 @@ public class Expense {
 
     public void setUpdatedAt(Timestamp updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

@@ -7,9 +7,10 @@ import com.contact.manager.services.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 public class UserController {
@@ -19,7 +20,18 @@ public class UserController {
 
 
     @PostMapping("/register")
-    ResponseEntity<User> registerUser(@RequestBody UserModel userModel){
+    ResponseEntity<User> registerUser(@Valid @RequestBody UserModel userModel){
         return new ResponseEntity<>(userService.createUser(userModel), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/users")
+    List<User> getAllUsers(){
+      return userService.getAllUsers();
+    }
+
+
+    @GetMapping("/user/{id}")
+    User getUserById(@PathVariable("id") Long userId){
+        return userService.getUserById(userId);
     }
 }

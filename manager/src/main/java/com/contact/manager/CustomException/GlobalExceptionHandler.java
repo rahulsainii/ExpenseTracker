@@ -1,5 +1,7 @@
 package com.contact.manager.CustomException;
 
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -30,4 +32,33 @@ public class GlobalExceptionHandler {
         er.setTimeStamp(new Date());
         return new ResponseEntity<ErrorObject>(er, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorObject>handleAlreadyPresentException(DataIntegrityViolationException ex, WebRequest request){
+        ErrorObject er = new ErrorObject();
+        er.setMessage(ex.getMessage());
+        er.setStatusCode(HttpStatus.CONFLICT.value());
+        er.setTimeStamp(new Date());
+        return new ResponseEntity<ErrorObject>(er, HttpStatus.CONFLICT);
+    }
+
+
+    @ExceptionHandler(InvalidDataAccessApiUsageException.class)
+    public ResponseEntity<ErrorObject>handleNotValidData(InvalidDataAccessApiUsageException ex, WebRequest request){
+        ErrorObject er = new ErrorObject();
+        er.setMessage(ex.getMessage());
+        er.setStatusCode(HttpStatus.CONFLICT.value());
+        er.setTimeStamp(new Date());
+        return new ResponseEntity<ErrorObject>(er, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorObject> handleResourceNotFoundException(ResourceNotFoundException ex, WebRequest request){
+        ErrorObject er = new ErrorObject();
+        er.setMessage(ex.getMessage());
+        er.setStatusCode(HttpStatus.NOT_FOUND.value());
+        er.setTimeStamp(new Date());
+        return new ResponseEntity<ErrorObject>(er, HttpStatus.NOT_FOUND);
+    }
+
 }

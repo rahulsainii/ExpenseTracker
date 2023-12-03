@@ -2,12 +2,15 @@ package com.contact.manager.services;
 
 import com.contact.manager.CustomException.ExpenseNotFoundException;
 import com.contact.manager.dao.ExpenseRepository;
+import com.contact.manager.dao.UserRepository;
 import com.contact.manager.entities.Expense;
+import com.contact.manager.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,6 +20,12 @@ public class ExpenseServiceImpl  implements ExpenseService{
 
     @Autowired
     ExpenseRepository expenseRepository;
+
+    @Autowired
+    UserServiceImpl userService;
+
+    @Autowired
+    UserRepository userRepository;
 
     @Override
     public Page<Expense> getAllExpenses(Pageable pageable) {
@@ -42,8 +51,18 @@ public class ExpenseServiceImpl  implements ExpenseService{
         expenseRepository.deleteById(id);
     }
 
-    public Expense saveExpense(Expense expense){
-       return expenseRepository.save(expense);
+    public User saveExpense(Expense expense, Long userId){
+       User user = userService.getUserById(userId);
+      expense.setUser(user);
+//       if(user.getExpenseList()==null){
+//           user.setExpenseList(new ArrayList<>());
+//       }
+//       List<Expense> extractedList = user.getExpenseList();
+//       extractedList.add(expense);
+//       user.setExpenseList(extractedList);
+      // return userRepository.save(user);
+       expenseRepository.save(expense);
+       return user;
     }
     
     public Expense updateExpense(Long id,Expense expense){

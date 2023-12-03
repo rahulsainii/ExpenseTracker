@@ -1,16 +1,19 @@
 package com.contact.manager.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.*;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Data
+@Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -39,5 +42,8 @@ public class User {
     @UpdateTimestamp
     private Timestamp updatedAt;
 
+    @JsonManagedReference
+    @OneToMany(mappedBy = "user")
+    List<Expense> expenseList;
 
 }

@@ -1,6 +1,7 @@
 package com.contact.manager.controller;
 
 import com.contact.manager.entities.Expense;
+import com.contact.manager.entities.User;
 import com.contact.manager.services.ExpenseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -22,7 +23,6 @@ public class ExpenseController {
     // we can send sort also as a parameter.
     // http://localhost:8080/expenses?page=1&size=3&sort=amount
     // send in desc order :- http://localhost:8080/expenses?page=1&size=3&sort=amount,desc
-
     // it can work without these extra variables
 
 
@@ -30,6 +30,7 @@ public class ExpenseController {
     public List<Expense> getAllExpenses(Pageable pageable){
         return expenseService.getAllExpenses(pageable).toList();
     }
+
 
     // passing parameter as part of url method = 1
     // http://localhost:8080/expenses/45
@@ -73,10 +74,10 @@ public class ExpenseController {
         return "user deleted";
     }
 
-    @PostMapping("/expense")
+    @PostMapping("/expense/user/{id}")
     @ResponseStatus(value= HttpStatus.CREATED)
-    public Expense saveExpense(@RequestBody Expense expense){
-        return expenseService.saveExpense(expense);
+    public User saveExpense(@RequestBody Expense expense, @PathVariable("id") Long userId){
+        return expenseService.saveExpense(expense,userId);
     }
 
     @PutMapping("/expense/{id}")
